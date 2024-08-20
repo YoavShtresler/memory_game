@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Game</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            padding-top: 20px;
+            background-color: #f8f9fa;
+        }
+        .card {
+            width: 120px;
+            height: 180px;
+            margin: 10px;
+            font-size: 36px;
+            text-align: center;          
+            line-height: 180px;
+            cursor: pointer;
+            background-color: #ffffff;
+            color: #000000;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+          
+        }
+        .card.flipped {
+            background-color: #ffffff;
+            color: #000000;
+            transform: rotateY(180deg) scaleX(-1);
+        }
+        .card:not(.flipped):hover {
+            transform: scale(1.05);
+        }
+        .container {
+            max-width: 900px;
+            margin-top: 50px;
+        }
+        #game-status {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .matched {
+            transition: background-color 0.8s;
+            background-color: #367a08 !important; /* Green background for matched cards */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container text-center">
+        <header class="mb-4">
+            <h1 class="display-4">Memory Game</h1>
+        </header>
+        <form id="setup-form" class="mb-4">
+            <div class="form-group">
+                <label for="numCards">Select number of cards (even number):</label>
+                <input type="number" id="numCards" class="form-control" min="2" step="2" value="8">
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">Start Game</button>
+        </form>
+        <div id="game-status" class="alert alert-info">Select the number of cards and start the game!</div>
+        <div id="game-board" class="card-container">
+            <!-- Cards will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Custom JavaScript -->
+    <script>
+        $(document).ready(function() {
+            function generateCards(numCards) {
+                const cardValues = [];
+                for (let i = 0; i < numCards / 2; i++) {
+                    cardValues.push(String.fromCharCode(65 + i)); // A, B, C, D, etc.
+                }
+                return [...cardValues, ...cardValues].sort(() => Math.random() - 0.5); // Shuffle cards
+            }
+
+            function createCard(value) {
+                return `<div class="card" data-value="${value}"><img src="playing-card.png" alt="Logo"></div>`;
+            }
+
+            function initializeGame(numCards) {
+                const $gameBoard = $('#game-board');
+                $gameBoard.empty();
+                const cards = generateCards(numCards);
+                cards.forEach(value => {
+                    $gameBoard.append(createCard(value));
+                });
+                $('.card').on('click', handleCardClick);
+            }
+
+            function handleCardClick() {
+                if (lockBoard || $(this).hasClass('flipped')) return;
+
+                $(this).addClass('flipped').text($(this).data('value'));
+
+                if (!firstCard) {
+                    firstCard = $(this);
+                    return;
+                }
+
+                secondCard = $(this);
+                lockBoard = true;
+
+                if (firstCard.data('value') === secondCard.data('value')) {
+                    firstCard.addClass('matched');
+                    secondCard.addClass('matched');
+                    matchedPairs++;
+                    firstCard = null;
+                    secondCard = null;
+                    lockBoard = false;
+                    if (matchedPairs === cardValues.length / 2) {
+                        $('#game-status').text('Congratulations! You found all pairs!');
+                    }
+                } else {
+                    setTimeout(() => {
+                        firstCard.removeClass('flipped').text('');
+                        secondCard.removeClass('flipped').text('');
+                        firstCard = null;
+                        secondCard = null;
+                        lockBoard = false;
+                    }, 1000);
+                }
+            }
+
+            let firstCard = null;
+            let secondCard = null;
+            let lockBoard = false;
+            let matchedPairs = 0;
+
+            $('#setup-form').on('submit', function(event) {
+                event.preventDefault();
+                const numCards = parseInt($('#numCards').val());
+                if (numCards % 2 === 0 && numCards >= 2) {
+                    $('#game-status').text('Game started!');
+                    initializeGame(numCards);
+                } else {
+                    $('#game-status').text('Please select an even number of cards.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
