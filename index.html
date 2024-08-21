@@ -49,8 +49,12 @@
         }
 
         .card.flipped {
-            background-color: #ffffff;
+            background-image: url("yoav.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             color: #000000;
+            font-size: 90px;
             transform: rotateY(180deg) scaleX(-1);
         }
 
@@ -60,8 +64,8 @@
 
         .card:not(.flipped) {
             background-image: url("playing-card.jpg");
-            background-size: cover; /* Ensures the image covers the entire card */
-            background-position: center; /* Centers the image */
+            background-size: cover;
+            background-position: center;
             background-repeat: no-repeat;
         }
 
@@ -82,8 +86,8 @@
         }
 
         .matched {
-            transition: background-color 0.8s;
-            background-color: #78bc61 !important;
+            transition: 0.3s opacity 0.3;
+            opacity: 1;
         }
 
         #timer {
@@ -114,7 +118,7 @@
             <button type="submit" class="btn start-game" id="startButton">Start Game</button>
         </form>
 
-        <div id="timer">00:00</div> 
+        <div id="timer">00:00</div>
 
         <div id="game-board" class="card-container">
         </div>
@@ -130,8 +134,8 @@
             let lockBoard = false;
             let matchedPairs = 0;
 
-            const emojiArray = ["😂","😝","😁","😱","🙌","🍻","🔥","🌈","🎈","🌹","💄","🎀","⚽","🎾","🏁","😡","👿","🐻","🐶","🐬","🐟","🍀","👀","🚗","🍎","💝","💙","👌","😍","😉","😓","😳","💪","💩","🍸","🔑","💖","🌟","🎉","🌺","🎶","👠","🏈","⚾","🏆","👽","💀","🐵","🐮","🐩","🐎","💣","👃","👂","🍓","💘","💜","👊","💋","😘","😜","😵","🙏","👋","🚽","💃","💎","🚀","🌙","🎁","⛄","🌊","⛵","🏀","🎱","💰","👶","👸","🐰","🐷","🐍","🐫","🔫","👄","🚲","🍉","💛","💚"]
-            
+            const emojiArray = ["😂", "😝", "😁", "😱", "🙌", "🍻", "🔥", "🌈", "🎈", "🌹", "💄", "🎀", "⚽", "🎾", "🏁", "😡", "👿", "🐻", "🐶", "🐬", "🐟", "🍀", "👀", "🚗", "🍎", "💝", "💙", "👌", "😍", "😉", "😓", "😳", "💪", "💩", "🍸", "🔑", "💖", "🌟", "🎉", "🌺", "🎶", "👠", "🏈", "⚾", "🏆", "👽", "💀", "🐵", "🐮", "🐩", "🐎", "💣", "👃", "👂", "🍓", "💘", "💜", "👊", "💋", "😘", "😜", "😵", "🙏", "👋", "🚽", "💃", "💎", "🚀", "🌙", "🎁", "⛄", "🌊", "⛵", "🏀", "🎱", "💰", "👶", "👸", "🐰", "🐷", "🐍", "🐫", "🔫", "👄", "🚲", "🍉", "💛", "💚"]
+
             function startTimer() {
                 $('#timer').text(formatTime(initialTime));
                 timer = setInterval(() => {
@@ -147,9 +151,9 @@
             }
 
             function generateCards(numCards) {
-                
+
                 for (let i = 0; i < numCards / 2; i++) {
-                    cardValues.push(emojiArray[i]); 
+                    cardValues.push(emojiArray[i]);
                 }
                 return [...cardValues, ...cardValues].sort(() => Math.random() - 0.5); // Shuffle cards
             }
@@ -160,8 +164,8 @@
 
             function initializeGame(numCards) {
                 $('#game-status').text('Game started!');
-                timeElapsed = 0; 
-                startTimer(); 
+                timeElapsed = 0;
+                startTimer();
 
                 $('#numCards').prop('hidden', true);
                 $('#startButton').prop('hidden', true);
@@ -213,10 +217,10 @@
 
             function endGame() {
                 clearInterval(timer);
-                $('#game-status').text(`Congratulations! You found all pairs in ${formatTime(timeElapsed)}!`); 
+                $('#game-status').text(`Congratulations! You found all pairs in ${formatTime(timeElapsed)}!`);
             }
 
-            
+
 
             $('#setup-form').on('submit', function (event) {
                 event.preventDefault();
