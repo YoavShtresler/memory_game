@@ -58,6 +58,14 @@
             transform: scale(1.05);
         }
 
+        .card:not(.flipped) {
+            transform: scale(1.05);
+            background-image: url("playing-card.jpg");
+            background-size: cover; /* Ensures the image covers the entire card */
+            background-position: center; /* Centers the image */
+            background-repeat: no-repeat;
+        }
+
         .container {
             max-width: 900px;
             margin-top: 50px;
