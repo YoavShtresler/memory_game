@@ -80,17 +80,17 @@
         <header class="mb-4">
             <h1 class="display-4">Memory Game</h1>
         </header>
+        <div id="game-status" class="alert alert-info">Select the number of cards and start the game!</div>
         <form id="setup-form" class="mb-4">
             <div class="form-group">
-                <label for="numCards">Select number of cards (even number):</label>
+                <label for="numCards" id="cardNumberChoose">Select number of cards (even number):</label>
                 <input type="number" id="numCards" class="form-control" min="2" step="2" value="8">
             </div>
-            <button type="submit" class="btn btn-primary btn-lg">Start Game</button>
+            <button type="submit" class="btn btn-primary btn-lg" id="startButton">Start Game</button>
         </form>
 
         <div id="timer">00:00</div> <!-- Timer Display -->
-        
-        <div id="game-status" class="alert alert-info">Select the number of cards and start the game!</div>
+
         <div id="game-board" class="card-container">
             <!-- Cards will be dynamically inserted here -->
         </div>
@@ -100,7 +100,7 @@
     <script>
         $(document).ready(function () {
             let timer;
-            let initialTime = 0; 
+            let initialTime = 0;
 
             function startTimer() {
                 $('#timer').text(formatTime(initialTime));
@@ -132,6 +132,11 @@
                 $('#game-status').text('Game started!');
                 timeElapsed = 0; // Reset the timer for each game
                 startTimer(); // Start the timer
+
+                $('#numCards').prop('hidden', true);
+                $('#startButton').prop('hidden', true);
+                $('#cardNumberChoose').prop('hidden', true);
+
                 const $gameBoard = $('#game-board');
                 $gameBoard.empty();
                 const cards = generateCards(numCards);
@@ -182,7 +187,7 @@
                 }
                 $('.card').off('click'); // Disable further clicks after the game ends
             }
-            
+
             let firstCard = null;
             let secondCard = null;
             let lockBoard = false;
