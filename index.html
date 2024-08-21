@@ -117,7 +117,12 @@
         $(document).ready(function () {
             let timer;
             let initialTime = 0;
-
+            const cardValues = [];
+            let firstCard = null;
+            let secondCard = null;
+            let lockBoard = false;
+            let matchedPairs = 0;
+            
             function startTimer() {
                 $('#timer').text(formatTime(initialTime));
                 timer = setInterval(() => {
@@ -133,7 +138,7 @@
             }
 
             function generateCards(numCards) {
-                const cardValues = [];
+                
                 for (let i = 0; i < numCards / 2; i++) {
                     cardValues.push(String.fromCharCode(65 + i)); // A, B, C, D, etc.
                 }
@@ -182,8 +187,8 @@
                     firstCard = null;
                     secondCard = null;
                     lockBoard = false;
-                    if (matchedPairs === cardValues.length / 2) {
-                        clearInterval(timer);
+                    if (matchedPairs === cardValues.length) {
+                        endGame();
                         $('#game-status').text('Congratulations! You found all pairs!');
                     }
                 } else {
@@ -197,17 +202,12 @@
                 }
             }
 
-            function endGame(win) {
-                if (win) {
-                    $('#game-status').text(`Congratulations! You found all pairs in ${formatTime(timeElapsed)}!`);
-                }
-                $('.card').off('click'); 
+            function endGame() {
+                clearInterval(timer);
+                $('#game-status').text(`Congratulations! You found all pairs in ${formatTime(timeElapsed)}!`); 
             }
 
-            let firstCard = null;
-            let secondCard = null;
-            let lockBoard = false;
-            let matchedPairs = 0;
+            
 
             $('#setup-form').on('submit', function (event) {
                 event.preventDefault();
