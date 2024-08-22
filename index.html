@@ -18,10 +18,15 @@
         }
 
         .disclaimer {
-            background-color: #e2491a;
-            color: #000000;
+            border-radius: 8px; /* Rounded corners */
+            padding: 15px; /* Padding inside the status element */
+            font-size: 18px; /* Font size */
+            font-weight: bold; /* Font weight */
+            color: #000000; /* Text color */
+            background-color: #3F66A2; /* Background color */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition */
         }
-
         .start-game {
             background-color: #3F66A2;
             color: #000000;
@@ -90,6 +95,22 @@
             opacity: 0.5;
         }
 
+        .custom-input {
+            border: 3px solid #9fbfee; /* Border color */
+            border-radius: 12px; /* Slightly rounded corners */
+            padding: 6px 10px; /* Reduced padding */
+            font-size: 18px; /* Smaller font size */
+            color: #333333; /* Text color */
+            background-color: #ffffff; /* Background color */
+            transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transition for interactions */
+        }
+
+        .custom-input:focus {
+            border-color: #000000; /* Border color when focused */
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.2); /* Subtle shadow to give depth */
+            outline: none; /* Remove default outline */
+        }
+ 
         #timer {
             font-size: 35px;
             font-weight: bold;
@@ -120,7 +141,7 @@
         <form id="setup-form" class="mb-4">
             <div class="form-group">
                 <label for="numCards" id="cardNumberChoose">Select number of cards (even number):</label>
-                <input type="number" id="numCards" class="form-control" min="2" step="2" value="8">
+                <input type="number" id="numCards" class="form-control form-control-sm custom-input text-center" min="2" step="2" value="8">
             </div>
             <button type="submit" class="btn start-game" id="startButton">Start Game</button>
         </form>
@@ -171,7 +192,7 @@
 
             function initializeGame(numCards) {
                 $('#game-status').text('Game started! Hurry Up!');
-                $('#game-status').css({'background-color':"#1a99e2"})
+                $('#game-status').css({'background-color':"#df18be"})
                 timeElapsed = 0;
                 startTimer();
 
