@@ -18,7 +18,7 @@
         }
 
         .disclaimer {
-            background-color: #E6AF2E;
+            background-color: #e2491a;
             color: #000000;
         }
 
@@ -101,6 +101,13 @@
             margin: 20px auto;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
+        body {
+            background-image: url('background.jpg'); /* Path to your background image */
+            background-size: cover; /* Ensure the image covers the whole background */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Prevent the image from repeating */
+            padding-top: 20px;
+        }
     </style>
 </head>
 
@@ -117,10 +124,10 @@
             </div>
             <button type="submit" class="btn start-game" id="startButton">Start Game</button>
         </form>
-
         <div id="timer">00:00</div>
-
-        <div id="game-board" class="card-container">
+        <div id="game-board" class="card-container"></div>
+        <div id="end-game-button-container" class="text-center mt-4" style="display: none;">
+            <button id="restart-game" class="btn start-game">Play Again</button>
         </div>
     </div>
 
@@ -163,7 +170,8 @@
             }
 
             function initializeGame(numCards) {
-                $('#game-status').text('Game started!');
+                $('#game-status').text('Game started! Hurry Up!');
+                $('#game-status').css({'background-color':"#1a99e2"})
                 timeElapsed = 0;
                 startTimer();
 
@@ -179,6 +187,17 @@
                 });
                 $('.card').on('click', handleCardClick);
             }
+
+            function handleEndGame() {
+                clearInterval(timer);
+                $('#game-status').css({'background-color':"#08f800"})
+                $('#game-status').text(`Congratulations! You found all pairs in ${formatTime(timeElapsed)}!`);
+                $('#end-game-button-container').show();
+                $('#restart-game').on('click', function() {
+                    location.reload();
+                });
+            }
+
 
             function handleCardClick() {
                 if (lockBoard || $(this).hasClass('flipped')) return;
@@ -201,8 +220,7 @@
                     secondCard = null;
                     lockBoard = false;
                     if (matchedPairs === cardValues.length) {
-                        endGame();
-                        $('#game-status').text('Congratulations! You found all pairs!');
+                        handleEndGame();
                     }
                 } else {
                     setTimeout(() => {
@@ -215,21 +233,21 @@
                 }
             }
 
-            function endGame() {
-                clearInterval(timer);
-                $('#game-status').text(`Congratulations! You found all pairs in ${formatTime(timeElapsed)}!`);
-            }
-
+            
 
 
             $('#setup-form').on('submit', function (event) {
                 event.preventDefault();
                 const numCards = parseInt($('#numCards').val());
-                if (numCards % 2 === 0 && numCards >= 2) {
+                if (numCards % 2 === 0 && numCards >= 2 && numCards <= 60) {
                     $('#game-status').text('Game started!');
                     initializeGame(numCards);
-                } else {
+                } else if (numCards % 2 !== 0){
                     $('#game-status').text('Please select an even number of cards.');
+                    $('#game-status').css({'background-color':"#ff0000"})
+                }else{
+                    $('#game-status').text('Please select a number between 2 and 60. (max 30 pairs)');
+                    $('#game-status').css({'background-color':"#ff0000"})
                 }
             });
         });
